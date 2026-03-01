@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miami: From the Magic City to a Smart Metropolis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-btn.active {
+            border-bottom: 4px solid #0f766e;
+            color: #0f766e;
+            font-weight: 700;
+        }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .node-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid #0f766e;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-[#fdfbf7] text-gray-800 font-sans antialiased">
+
+    <!-- Chosen Palette: Warm Neutrals (#fdfbf7) with Teal (#0f766e) and Rose/Coral (#f43f5e) accents. -->
+    
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="py-6 flex flex-col md:flex-row justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-extrabold text-teal-800 tracking-tight">MIAMI</h1>
+                    <p class="text-sm text-rose-500 font-semibold tracking-widest uppercase mt-1">From Magic City to Smart Metropolis</p>
+                </div>
+                <nav class="mt-4 md:mt-0 flex space-x-2 sm:space-x-8 overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
+                    <button class="nav-btn active pb-2 px-1 text-gray-500 font-medium whitespace-nowrap transition-colors hover:text-teal-700" data-target="identity">Identity & Resilience</button>
+                    <button class="nav-btn pb-2 px-1 text-gray-500 font-medium whitespace-nowrap transition-colors hover:text-teal-700" data-target="economy">Economy & Culture</button>
+                    <button class="nav-btn pb-2 px-1 text-gray-500 font-medium whitespace-nowrap transition-colors hover:text-teal-700" data-target="future">Urban Future</button>
+                    <button class="nav-btn pb-2 px-1 text-teal-600 font-bold whitespace-nowrap transition-colors hover:text-teal-800" data-target="assistant">✨ AI Assistant</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <!-- Identity Tab -->
+        <div id="identity" class="tab-content active">
+            <div class="mb-10 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">The Birth of a Global Icon</h2>
+                <p class="text-lg text-gray-600 leading-relaxed">
+                    Explore the fascinating history behind Miami's rapid growth and how its unique geography forces it to be a global leader in environmental innovation and climate resilience.
+                </p>
+                <button onclick="summarizeSection('identity')" class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-teal-50 text-teal-700 rounded-full text-sm font-semibold hover:bg-teal-100 transition-colors">
+                    ✨ Summarize this Section
+                </button>
+                <div id="summary-identity" class="hidden mt-4 p-4 bg-white border border-teal-100 rounded-xl text-left text-sm text-gray-700 shadow-sm"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col justify-center">
+                    <div class="text-4xl mb-4">✨</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3">Why "The Magic City"?</h3>
+                    <p class="text-gray-600 mb-4">
+                        Founded in 1896 by Julia Tuttle, Miami is the only major U.S. city conceived by a woman. It earned its nickname because it transformed from a tiny settlement of 300 people to a booming metropolis in just one year. Today, it stands as a $350B+ economy.
+                    </p>
+                    <div class="mt-6 bg-teal-50 p-4 rounded-xl border border-teal-100">
+                        <h4 class="font-semibold text-teal-800 mb-2">Climate Resilience Leadership</h4>
+                        <div class="flex items-center gap-4">
+                            <div class="text-3xl font-black text-teal-600">2m</div>
+                            <p class="text-sm text-gray-700">Average elevation above sea level. Miami is now a "living laboratory" for flood mitigation and carbon-neutral construction tech.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                    <h3 class="text-xl font-bold text-center text-gray-800 mb-2">The Gateway to the Americas</h3>
+                    <p class="text-center text-sm text-gray-500 mb-6">Demographic Diversity Breakdown</p>
+                    <div class="chart-container">
+                        <canvas id="demographicsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Economy Tab -->
+        <div id="economy" class="tab-content">
+            <div class="mb-10 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Economic Powerhouse & Cultural Hub</h2>
+                <p class="text-lg text-gray-600 leading-relaxed">
+                    From the bustling financial heart of Brickell to the neon-lit streets of South Beach, Miami is where global trade meets unparalleled artistic expression.
+                </p>
+                <button onclick="summarizeSection('economy')" class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-teal-50 text-teal-700 rounded-full text-sm font-semibold hover:bg-teal-100 transition-colors">
+                    ✨ Summarize this Section
+                </button>
+                <div id="summary-economy" class="hidden mt-4 p-4 bg-white border border-teal-100 rounded-xl text-left text-sm text-gray-700 shadow-sm"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-blue-500">
+                    <div class="text-3xl mb-3">🚢</div>
+                    <h3 class="font-bold text-gray-800 mb-2">Cruise Capital</h3>
+                    <p class="text-sm text-gray-600">PortMiami is the busiest passenger port in the world, serving over 5 million cruise travelers annually.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-emerald-500">
+                    <div class="text-3xl mb-3">💼</div>
+                    <h3 class="font-bold text-gray-800 mb-2">Wall Street South</h3>
+                    <p class="text-sm text-gray-600">Brickell hosts the largest concentration of international banks in the US outside of NYC.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-rose-400">
+                    <div class="text-3xl mb-3">🎨</div>
+                    <h3 class="font-bold text-gray-800 mb-2">Art Deco Legacy</h3>
+                    <p class="text-sm text-gray-600">South Beach preserves the world's largest collection of 1920s-30s geometric pastel architecture.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-purple-500">
+                    <div class="text-3xl mb-3">🏙️</div>
+                    <h3 class="font-bold text-gray-800 mb-2">Wynwood Walls</h3>
+                    <p class="text-sm text-gray-600">A former warehouse district transformed into the world's premier outdoor street art gallery.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Future Tab -->
+        <div id="future" class="tab-content">
+            <div class="mb-10 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Engineering the 15-Minute City</h2>
+                <p class="text-lg text-gray-600 leading-relaxed">
+                    Miami is pivoting from car-centric urbanism to a "human-centered" design, focusing on walkability, sustainable transit, and interconnected green spaces.
+                </p>
+                <button onclick="summarizeSection('future')" class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-teal-50 text-teal-700 rounded-full text-sm font-semibold hover:bg-teal-100 transition-colors">
+                    ✨ Summarize this Section
+                </button>
+                <div id="summary-future" class="hidden mt-4 p-4 bg-white border border-teal-100 rounded-xl text-left text-sm text-gray-700 shadow-sm"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                <div class="lg:col-span-7 bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">The 15-Minute Framework</h3>
+                    <div class="relative w-full max-w-sm mx-auto aspect-square border-4 border-dashed border-teal-100 rounded-full flex items-center justify-center my-8">
+                        <div class="absolute inset-0 bg-teal-50 rounded-full opacity-50 animate-pulse"></div>
+                        <div class="relative z-10 bg-teal-600 text-white font-bold w-20 h-20 rounded-full flex flex-col items-center justify-center shadow-lg">
+                            <span class="text-2xl">🏠</span>
+                            <span class="text-xs mt-1">Home</span>
+                        </div>
+                        <button onclick="update15MinDetail('is')" class="node-btn absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-blue-400 w-16 h-16 rounded-full flex items-center justify-center shadow-md">🏢</button>
+                        <button onclick="update15MinDetail('market')" class="node-btn absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-white border-2 border-orange-400 w-16 h-16 rounded-full flex items-center justify-center shadow-md">🛒</button>
+                        <button onclick="update15MinDetail('saglik')" class="node-btn absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-rose-400 w-16 h-16 rounded-full flex items-center justify-center shadow-md">🏥</button>
+                        <button onclick="update15MinDetail('okul')" class="node-btn absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 bg-white border-2 border-purple-400 w-16 h-16 rounded-full flex items-center justify-center shadow-md">🎓</button>
+                    </div>
+                    <div id="min15-detail" class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200 text-center min-h-[80px] flex items-center justify-center text-gray-700 italic">Click the icons to explore proximity goals.</div>
+                </div>
+
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Smart Mobility Matrix</h3>
+                        <div class="flex flex-col gap-2">
+                            <button onclick="updateTransit('metromover')" class="text-left px-4 py-3 bg-gray-50 hover:bg-teal-50 rounded-lg transition-colors">🚆 Metromover (Free)</button>
+                            <button onclick="updateTransit('underline')" class="text-left px-4 py-3 bg-gray-50 hover:bg-teal-50 rounded-lg transition-colors">🚴 The Underline Path</button>
+                            <button onclick="updateTransit('brightline')" class="text-left px-4 py-3 bg-gray-50 hover:bg-teal-50 rounded-lg transition-colors">🚄 Brightline High-Speed</button>
+                        </div>
+                        <div id="transit-detail" class="mt-4 p-4 text-sm text-gray-600 bg-teal-50/50 rounded-lg border border-teal-100">Select a transit method above.</div>
+                    </div>
+                    <div class="bg-emerald-800 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+                        <div class="relative z-10">
+                            <h3 class="text-2xl font-bold mb-2">2026 World Cup Prep</h3>
+                            <p class="text-emerald-100 text-sm mb-2">Miami is showcasing its sustainable infrastructure on the global stage.</p>
+                            <div class="text-xs bg-emerald-700/50 p-2 rounded border border-emerald-600 mt-2">
+                                ⚽ FIFA Venue: Hard Rock Stadium
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Assistant Tab -->
+        <div id="assistant" class="tab-content">
+            <div class="mb-10 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">✨ Smart Vision Assistant</h2>
+                <p class="text-lg text-gray-600 leading-relaxed">
+                    Ask anything about Miami's transformation, urban density plans, or the 2026 World Cup preparations. Gemini AI is ready to provide real-time insights.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-xl border border-teal-100 overflow-hidden max-w-4xl mx-auto">
+                <div class="p-6 bg-teal-800 text-white flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🤖</span>
+                        <div>
+                            <p class="font-bold">Miami AI Guide</p>
+                            <p class="text-xs text-teal-200">Online • Urban Planning Expert</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="chat-window" class="h-96 overflow-y-auto p-6 space-y-4 bg-gray-50">
+                    <div class="flex justify-start">
+                        <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 max-w-[80%] text-sm">
+                            Hello! I am your AI assistant for Miami's smart transformation. How can I help you explore the city's future today?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-white border-t border-gray-100">
+                    <div class="flex gap-2">
+                        <input type="text" id="ai-input" placeholder="Ask about Miami's future..." class="flex-1 px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm">
+                        <button onclick="askAI()" id="send-btn" class="bg-teal-700 text-white px-6 py-3 rounded-xl font-bold hover:bg-teal-800 transition-all flex items-center gap-2">
+                            ✨ Send
+                        </button>
+                    </div>
+                    <div class="mt-2 flex gap-2 overflow-x-auto pb-2">
+                        <button onclick="quickQuestion('What is the 15-minute city concept?')" class="whitespace-nowrap px-3 py-1 bg-teal-50 text-teal-700 text-xs rounded-full border border-teal-100 hover:bg-teal-100">15m City?</button>
+                        <button onclick="quickQuestion('How is Miami fighting sea level rise?')" class="whitespace-nowrap px-3 py-1 bg-teal-50 text-teal-700 text-xs rounded-full border border-teal-100 hover:bg-teal-100">Sea Level Defense</button>
+                        <button onclick="quickQuestion('Tell me about the 2026 World Cup prep.')" class="whitespace-nowrap px-3 py-1 bg-teal-50 text-teal-700 text-xs rounded-full border border-teal-100 hover:bg-teal-100">World Cup 2026</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-12 py-8 text-center text-sm text-gray-500">
+        <p>© 2026 Miami Visionary Hub. Embracing Magic, Engineering Intelligence.</p>
+    </footer>
+
+    <script>
+        const apiKey = "";
+        const modelName = "gemini-2.5-flash-preview-09-2025";
+
+        async function callGemini(prompt, systemInstruction = "") {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemInstruction }] }
+            };
+
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) throw new Error('API Error');
+                    const result = await response.json();
+                    return result.candidates?.[0]?.content?.parts?.[0]?.text;
+                } catch (e) {
+                    await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+                }
+            }
+            return "Apologies, I'm having trouble connecting to the network. Please try again later.";
+        }
+
+        async function summarizeSection(sectionId) {
+            const container = document.getElementById(`summary-${sectionId}`);
+            container.innerHTML = '<div class="flex items-center gap-2"><div class="loader"></div> Analyzing...</div>';
+            container.classList.remove('hidden');
+
+            const sectionContent = document.getElementById(sectionId).innerText;
+            const prompt = `Please summarize the following section about Miami's vision in 3 concise bullet points. Respond in English only:\n\n${sectionContent}`;
+            
+            const summary = await callGemini(prompt, "You are an urban planning and history expert focused on Miami.");
+            container.innerHTML = `<strong>✨ AI Insights:</strong><br>${summary.replace(/\n/g, '<br>')}`;
+        }
+
+        async function askAI() {
+            const input = document.getElementById('ai-input');
+            const chatWindow = document.getElementById('chat-window');
+            const userMsg = input.value.trim();
+            if (!userMsg) return;
+
+            chatWindow.innerHTML += `<div class="flex justify-end"><div class="bg-teal-600 text-white p-3 rounded-2xl shadow-sm max-w-[80%] text-sm">${userMsg}</div></div>`;
+            input.value = '';
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+
+            const loadingId = 'loading-' + Date.now();
+            chatWindow.innerHTML += `<div id="${loadingId}" class="flex justify-start"><div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 max-w-[80%] text-sm"><div class="loader"></div> Drafting response...</div></div>`;
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+
+            const systemPrompt = "You are an expert on Miami's geography, history, and future smart city initiatives. Provide helpful, informative, and engaging answers in English.";
+            const response = await callGemini(userMsg, systemPrompt);
+
+            document.getElementById(loadingId).remove();
+            chatWindow.innerHTML += `<div class="flex justify-start"><div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 max-w-[80%] text-sm">${response.replace(/\n/g, '<br>')}</div></div>`;
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function quickQuestion(question) {
+            document.getElementById('ai-input').value = question;
+            askAI();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const navBtns = document.querySelectorAll('.nav-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            navBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    navBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(tc => tc.classList.remove('active'));
+                    btn.classList.add('active');
+                    document.getElementById(btn.getAttribute('data-target')).classList.add('active');
+                });
+            });
+
+            const ctx = document.getElementById('demographicsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Hispanic/Latin Origin', 'Other Demographics'],
+                    datasets: [{
+                        data: [70, 30],
+                        backgroundColor: ['#f43f5e', '#ccfbf1'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { position: 'bottom' },
+                        tooltip: { enabled: true }
+                    },
+                    cutout: '70%'
+                }
+            });
+        });
+
+        const min15Data = {
+            'is': '<strong>Work:</strong> Proximity to Brickell and tech hubs via mixed-use zoning reduces commute times to under 15 minutes.',
+            'market': '<strong>Daily Needs:</strong> Grocery stores and retail are embedded into residential blocks to discourage car usage.',
+            'saglik': '<strong>Healthcare:</strong> Urgent care and specialized clinics are placed within walking distance of high-density housing.',
+            'okul': '<strong>Education:</strong> Safe, shaded walking corridors connect schools directly to residential clusters.'
+        };
+        function update15MinDetail(node) { document.getElementById('min15-detail').innerHTML = min15Data[node]; }
+
+        const transitData = {
+            'metromover': 'A 4.4-mile automated people mover system. It is electrically powered and free to use for all commuters in the downtown core.',
+            'underline': 'A 10-mile linear park and urban trail beneath the Metrorail, designed to foster biking and pedestrian safety.',
+            'brightline': 'The only privately owned high-speed rail in the US, connecting Miami to Fort Lauderdale, West Palm Beach, and Orlando.'
+        };
+        function updateTransit(type) { document.getElementById('transit-detail').innerHTML = transitData[type]; }
+
+        document.getElementById('ai-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') askAI();
+        });
+    </script>
+</body>
+</html>
